@@ -60,7 +60,7 @@ exports.login = (req, res) => {
 
 exports.createNewUser = async (req, res) => {
 
-    let { username, password, age, height, weight, sex } = req.body;
+    let { username, password } = req.body;
 
     if (!username || !password) {
         res.status(400)
@@ -74,11 +74,28 @@ exports.createNewUser = async (req, res) => {
 
     const query = `
         INSERT INTO users
-            (id, username, password, height, weight, age, gender)
-            VALUES (?, ?, ?, ?, ?, ?, ?);
+            (id, username, password, account_value, creation_date)
+            VALUES (?, ?, ?, 0, ?);
     `;
 
-    const placeholders = [uuid(), username, encryptedPassword, height, weight, age, sex];
+    // This function takes a date object and converts it to a string in the format 'yyyy-mm-dd'
+    // with leading zeros when needed
+    let today = new Date()
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
+    const placeholders = [uuid(), username, encryptedPassword, formatDate(today)];
 
     db.query(query, placeholders, (err, results) => {
         if (err) {
@@ -133,7 +150,7 @@ exports.getUserByUsername = (req, res) => {
 
 exports.deleteAccount = (req, res) => {
 
-    const { id } = req.params;
+    const { id } = req.body;
 
     const script = `
         DELETE FROM users
@@ -157,6 +174,41 @@ exports.deleteAccount = (req, res) => {
             res.send({
                 message: "User profile deleted successfully"
             })
+        }
+    });
+}
+
+exports.addMoneyById = async (req, res) => {
+    let { id, pretendMoney } = req.body;
+
+    let script = `
+        UPDATE users
+        SET account_value = ?
+        WHERE (id = ?)
+    `
+
+    let pValues = [pretendMoney, id];
+
+    db.query(script, pValues, (err, results) => {
+        if (err) {
+            res.status(500).send({
+                message: 'There was an error adding pretend money',
+                err
+            })
+        } else if (results.affectedRows == 0) {
+            res.status(404).send({
+                message: 'No account with that id found',
+                id
+            });
+        } else if (
+            id !== 'string'
+            || pretendMoney != 'number'
+        ) {
+            res.status(400).send({
+                message: 'Missing required data'
+            })
+        } else {
+            res.send(results)
         }
     });
 }
