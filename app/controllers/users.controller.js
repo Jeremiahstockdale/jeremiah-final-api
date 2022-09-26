@@ -201,11 +201,12 @@ exports.addMoneyById = async (req, res) => {
                 id
             });
         } else if (
-            id !== 'string'
-            || pretendMoney != 'number'
+            typeof id !== 'string'
+            || typeof pretendMoney != 'number'
         ) {
             res.status(400).send({
-                message: 'Missing required data'
+                message: 'Missing required data',
+                id, pretendMoney
             })
         } else {
             res.send(results)

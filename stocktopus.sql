@@ -6,7 +6,7 @@ CREATE TABLE `stocktopus`.`users` (
     `id` VARCHAR(45) NOT NULL UNIQUE,
     `username` VARCHAR(100) NOT NULL UNIQUE,
     `password` VARCHAR(255) NOT NULL,
-    `account_value` FLOAT NOT NULL,
+    `account_value` FLOAT NOT NULL, -- liquid account value.
     `creation_date` DATE, --  format YYYY-MM-DD
     
     PRIMARY KEY (`id`)
@@ -15,7 +15,7 @@ CREATE TABLE `stocktopus`.`users` (
 CREATE TABLE `stocktopus`.`paper_trades` (
     `id` INT AUTO_INCREMENT NOT NULL UNIQUE,
     `user_id` VARCHAR(45) NOT NULL,
-    `stock_id` VARCHAR(45) NOT NULL,
+    `stock_symbol` VARCHAR(45) NOT NULL, -- changed from stock_id
     `init_share_price` FLOAT NOT NULL,
     `shares` INT NOT NULL,
     `init_investment_date` DATE NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE `stocktopus`.`paper_trades` (
 CREATE TABLE `stocktopus`.`likes` (
     `id` INT AUTO_INCREMENT NOT NULL UNIQUE,
     `user_id` VARCHAR(45) NOT NULL,
-    `stock_id` VARCHAR(45) NOT NULL,
+    `stock_symbol` VARCHAR(45) NOT NULL,
     
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `users`(`id`)

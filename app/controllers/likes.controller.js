@@ -1,16 +1,16 @@
 const db = require('../index');
 
-exports.addLikedStock = (req, res) => {
-    let { userId, stockId } = req.body;
+exports.addLikedStockBySymbol = (req, res) => {
+    let { symbol, userId } = req.body;
 
     let script = `
         INSERT INTO likes
-            (user_id, stock_id)
+            (user_id, stock_symbol)
         VALUES
             (?, ?)
     `
 
-    let pValues = [userId, stockId]
+    let pValues = [userId, symbol]
 
     db.query(script, pValues, (err, results) => {
         if (err) {
@@ -21,16 +21,15 @@ exports.addLikedStock = (req, res) => {
         } else if (results.affectedRows == 0) {
             res.status(404).send({
                 message: 'Not Found',
-                id
+
             });
-        } else if (
-            id !== 'string'
-            || stockId != 'string'
-        ) {
-            res.status(400).send({
-                message: 'Missing required data'
-            })
-        } else {
+        }
+        // else if (id !== 'string'|| stockId != 'string') {
+        //     res.status(400).send({
+        //         message: 'Missing required data'
+        //     })
+        // } 
+        else {
             res.send({
                 message: 'Stock added to your likes'
             })
@@ -40,7 +39,7 @@ exports.addLikedStock = (req, res) => {
 }
 
 exports.deleteLikedStock = (req, res) => {
-    let { id } = req.body;
+    let { id } = req.params;
 
     let script = `
         DELETE FROM likes
@@ -53,11 +52,11 @@ exports.deleteLikedStock = (req, res) => {
                 message: 'There was a problem removing this like',
                 err
             })
-        } else if (results.affectedRows == 0) {
+        } else if (results.length == 0) {
             res.status(404).send({
                 message: 'No value found with this id.',
                 id
-            });
+            })
         } else {
             res.send({
                 message: "User like deleted successfully"

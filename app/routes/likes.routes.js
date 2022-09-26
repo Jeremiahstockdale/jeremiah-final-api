@@ -1,9 +1,9 @@
 module.exports = (app) => {
 
-    const users = require('../controllers/users.controller');
+    const likes = require('../controllers/likes.controller');
 
-    app.post(`/api/likes/`, users.addLikedStock);
-    app.delete(`/api/likes/`, users.deleteLikedStock);
-    app.get(`/api/likes/:userId`, users.getAllLikedStocks);
-    app.get(`/api/likes/:id`, users.getLikedStockById);
+    app.post(`/api/likes/`, likes.addLikedStockBySymbol);
+    app.delete(`/api/likes/`, likes.deleteLikedStock);
+    app.get(`/api/likes/:userId`, likes.getAllLikedStocks);
+    // app.get(`/api/likes/:id`, users.getLikedStockById);
 }

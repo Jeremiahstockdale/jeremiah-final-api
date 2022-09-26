@@ -1,6 +1,6 @@
 module.exports = (app) => {
 
-    const trades = require('../controllers/trades.controller');
+    const trades = require('../controllers/paperTrades.controller');
 
     app.post('/api/trades', trades.createNewTrade);
     app.get('/api/trades/:username', trades.getAllActiveTrades);
