@@ -1,13 +1,13 @@
 const db = require('../index');
-const { v4: uuid, stringify } = require('uuid');
+// const { v4: uuid, stringify } = require('uuid');
 
 
 exports.createNewTrade = async (req, res) => {
-    let { userId, stockId, initSharePrice, shares, initInvestmentValue } = req.body;
+    let { symbol, userId, sharePrice, shares } = req.body;
 
     const script = `
         INSERT INTO paper_trades
-            (user_id, stock_id, init_share_price, shares, init_investment_date, init_investment_value)
+            (stock_symbol, user_id, init_share_price, shares, init_investment_date, init_investment_value)
         VALUES
             (?, ?, ?, ?, ?, ?)
     `
@@ -27,12 +27,13 @@ exports.createNewTrade = async (req, res) => {
         return [year, month, day].join('-');
     }
 
+    let initInvestmentValue = sharePrice * shares;
+
     if (
         typeof userId !== 'string'
-        || typeof stockId !== 'string'
-        || typeof initSharePrice !== 'number'
+        || typeof symbol !== 'string'
+        || typeof sharePrice !== 'number'
         || typeof shares !== 'number'
-        || typeof initInvestmentValue !== 'number'
     ) {
         res.status(404).send({
             message: "You are missing required data"
@@ -40,7 +41,7 @@ exports.createNewTrade = async (req, res) => {
         return;
     }
 
-    const pValues = [userId, stockId, initSharePrice, shares, formatDate(today), initInvestmentValue]
+    const pValues = [symbol, userId, sharePrice, shares, formatDate(today), initInvestmentValue]
 
     db.query(script, pValues, (err, results) => {
         if (err) {
@@ -58,24 +59,23 @@ exports.createNewTrade = async (req, res) => {
 
 exports.getAllActiveTrades = async (req, res) => {
 
-    let { username } = req.params;
+    let { userId } = req.params;
 
     const script = `
-        SELECT * FROM paper_trades
-        INNER JOIN  users ON  user_id = users.id
-        WHERE users.username =  ?
+        SELECT * FROM stocktopus.paper_trades
+        WHERE (user_id =  ?)
     `
 
-    db.query(script, [username], (err, results) => {
+    db.query(script, [userId], (err, results) => {
         if (err) {
             res.status(500).send({
                 error: err,
-                message: "There was an error finding your username."
+                message: "There was an error finding your trades."
             });
             return;
         } else if (results.length == 0) {
             res.status(404).send({
-                message: "Could not locate a user with this username."
+                message: "Could not locate a user with this user id."
             })
             return;
         } else {
@@ -85,65 +85,71 @@ exports.getAllActiveTrades = async (req, res) => {
     });
 }
 
-exports.getTradeById = async (req, res) => {
-    let { id } = req.params;
+// exports.getTradeById = async (req, res) => {
+//     let { id } = req.params;
 
-    let script = `
-        SELECT * FROM paper_trades
-        WHERE  (id = ?)
-    `
+//     let script = `
+//         SELECT * FROM paper_trades
+//         WHERE  (id = ?)
+//     `
 
-    db.query(script, [id], (err, results) => {
-        if (err) {
-            res.status(500).send({
-                error: err,
-                message: "There was an error finding that trade."
-            });
-            return;
-        } else if (results.length == 0) {
-            res.status(404).send({
-                message: "Could not locate a trade with this id."
-            })
-            return;
-        } else {
-            res.send(results);
-            return;
-        }
-    });
-}
+//     db.query(script, [id], (err, results) => {
+//         if (err) {
+//             res.status(500).send({
+//                 error: err,
+//                 message: "There was an error finding that trade."
+//             });
+//             return;
+//         } else if (results.length == 0) {
+//             res.status(404).send({
+//                 message: "Could not locate a trade with this id."
+//             })
+//             return;
+//         } else {
+//             res.send(results);
+//             return;
+//         }
+//     });
+// }
 
-exports.sellTrade = async (req, res) => {
-    let { id, currentPrice } = req.body;
+// exports.sellTrade = async (req, res) => {
+//     let { id, currentPrice } = req.body;
 
-    let script = `
-        UPDATE paper_trades
-        SET sold_price = ?
-        WHERE (id = ?);
-    `
+//     let script = `
+//         UPDATE paper_trades
+//         SET sold_price = ?
+//         WHERE (id = ?);
+//     `
 
-    let pValues = [currentPrice, id];
+//     let pValues = [currentPrice, id];
 
-    db.query(script, pValues, (err, results) => {
-        if (err) {
-            res.status(500).send({
-                error: err,
-                message: "There was an error updating this trade"
-            });
-            return;
-        } else if (results.length == 0) {
-            res.status(404).send({
-                message: "Trade not found"
-            })
-            return;
-        } else {
-            res.send(results);
-            return;
-        }
-    });
-}
+//     db.query(script, pValues, (err, results) => {
+//         if (err) {
+//             res.status(500).send({
+//                 error: err,
+//                 message: "There was an error updating this trade"
+//             });
+//             return;
+//         } else if (results.length == 0) {
+//             res.status(404).send({
+//                 message: "Trade not found"
+//             })
+//             return;
+//         } else {
+//             res.send(results);
+//             return;
+//         }
+//     });
+// }
 
 exports.deleteTrade = async (req, res) => {
-    let { id } = req.body;
+    let { id } = req.params;
+
+    // let updateScript = `
+    //     UPDATE paper_trades
+    //         SET 
+    // `
+
 
     let script = `
         DELETE FROM paper_trades
