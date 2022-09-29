@@ -78,8 +78,8 @@ exports.createNewUser = async (req, res) => {
             VALUES (?, ?, ?, 0, ?);
     `;
 
-    // This function takes a date object and converts it to a string in the format 'yyyy-mm-dd'
-    // with leading zeros when needed
+    // This function takes a date object and converts it to a string
+    // in the format 'yyyy-mm-dd' with leading zeros when needed
     let today = new Date()
     function formatDate(date) {
         var d = new Date(date),

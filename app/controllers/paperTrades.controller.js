@@ -1,8 +1,8 @@
 const db = require('../index');
-// const { v4: uuid, stringify } = require('uuid');
 
 
 exports.createNewTrade = async (req, res) => {
+
     let { symbol, userId, sharePrice, shares } = req.body;
 
     const script = `
@@ -11,6 +11,7 @@ exports.createNewTrade = async (req, res) => {
         VALUES
             (?, ?, ?, ?, ?, ?)
     `
+
     let today = new Date()
 
     function formatDate(date) {
@@ -85,71 +86,9 @@ exports.getAllActiveTrades = async (req, res) => {
     });
 }
 
-// exports.getTradeById = async (req, res) => {
-//     let { id } = req.params;
-
-//     let script = `
-//         SELECT * FROM paper_trades
-//         WHERE  (id = ?)
-//     `
-
-//     db.query(script, [id], (err, results) => {
-//         if (err) {
-//             res.status(500).send({
-//                 error: err,
-//                 message: "There was an error finding that trade."
-//             });
-//             return;
-//         } else if (results.length == 0) {
-//             res.status(404).send({
-//                 message: "Could not locate a trade with this id."
-//             })
-//             return;
-//         } else {
-//             res.send(results);
-//             return;
-//         }
-//     });
-// }
-
-// exports.sellTrade = async (req, res) => {
-//     let { id, currentPrice } = req.body;
-
-//     let script = `
-//         UPDATE paper_trades
-//         SET sold_price = ?
-//         WHERE (id = ?);
-//     `
-
-//     let pValues = [currentPrice, id];
-
-//     db.query(script, pValues, (err, results) => {
-//         if (err) {
-//             res.status(500).send({
-//                 error: err,
-//                 message: "There was an error updating this trade"
-//             });
-//             return;
-//         } else if (results.length == 0) {
-//             res.status(404).send({
-//                 message: "Trade not found"
-//             })
-//             return;
-//         } else {
-//             res.send(results);
-//             return;
-//         }
-//     });
-// }
-
 exports.deleteTrade = async (req, res) => {
+
     let { id } = req.params;
-
-    // let updateScript = `
-    //     UPDATE paper_trades
-    //         SET 
-    // `
-
 
     let script = `
         DELETE FROM paper_trades
