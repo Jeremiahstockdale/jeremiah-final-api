@@ -42,6 +42,24 @@ VALUES
     ('a66a75f2-29ff-11ed-bd1e-c93bcd52340c', "Jeremiah", "$2b$10$SDDW7s.tLkN5iGYbTgNYWuneH3acLUrZQo1awnrz55Qa7e8fyIp1C", 4200, '2017-02-02'),
     ('a66a7692-29ff-11ed-bd1e-c93bcd52340c', "Ford", "$2b$10$SDDW7s.tLkN5iGYbTgNYWuneH3acLUrZQo1awnrz55Qa7e8fyIp1C", 350, '2022-04-03'),
     ('a66a76e2-29ff-11ed-bd1e-c93bcd52340c', "Chris", "$2b$10$SDDW7s.tLkN5iGYbTgNYWuneH3acLUrZQo1awnrz55Qa7e8fyIp1C", 1200, '2007-12-06'),
-    ('a66a7732-29ff-11ed-bd1e-c93bcd52340c', "Will", "$2b$10$SDDW7s.tLkN5iGYbTgNYWuneH3acLUrZQo1awnrz55Qa7e8fyIp1C", 3000, '2020-10-31')
+    ('a66a7732-29ff-11ed-bd1e-c93bcd52340c', "Will", "$2b$10$SDDW7s.tLkN5iGYbTgNYWuneH3acLUrZQo1awnrz55Qa7e8fyIp1C", 3000, '2020-10-31'),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', "Code+Trust", "$2b$10$SDDW7s.tLkN5iGYbTgNYWuneH3acLUrZQo1awnrz55Qa7e8fyIp1C", 100000, '2020-10-31')
 ;
 
+INSERT INTO `stocktopus`.`paper_trades` 
+    (`user_id`, `stock_symbol`, `init_share_price`, `shares`, `init_investment_date`, `init_investment_value`)
+VALUES 
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'NKE', 105.43, 100, '2022-09-12', 10543.00),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'BTC', 19084.82, 5, '2022-10-13', 95424.10)
+;
+
+INSERT INTO `stocktopus`.`likes` 
+    (`user_id`, `stock_symbol`)
+VALUES 
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'NKE'),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'GOOG'),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'NFLX'),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'GBP'),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'SHIB'),
+    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'CL=F')
+;
