@@ -60,6 +60,5 @@ VALUES
     ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'GOOG'),
     ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'NFLX'),
     ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'GBP'),
-    ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'SHIB'),
     ('a66a7731-29ff-11ed-bd1e-c93bcd52340c', 'CL=F')
 ;
